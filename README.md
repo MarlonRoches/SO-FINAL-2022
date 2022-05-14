@@ -207,3 +207,73 @@ Los espacios cercanos tienen una probabilidad de ser simiales mas no es seguro.
 - Si ocurre un error, este debe validar si hay suficiente espacio para acoplar el segmento en la RAM, si no se va a la secundaria.
 - Se utiliza cuando se tienen pocos recursos, lo que hace imposible la paginacion por demanda.
 
+
+# Gestion De Disco
+## Archivos
+-  Es una coleccion de informacion relacionada que se guarda en disco y se le da un nombre de fichero.
+- Para el usuario, es la porcion mas pequeña del almacenamiento secundario.
+- Representan programas, fuentes como objeto.
+- Es una secuencia de bits, bytes, líneas o registros cuyo significado el creador y usuario del archivo define.
+- El SO mantiene una tabla de archivos abiertos/
+## Archivos Fuentes
+- Secuencia de **subrutinas y funciones**, cada una de las cuales consta de declaraciones seguidas de enunciados ejecutables
+## Archivos Objeto
+- Secuencia de bytes organizados en **bloques que el enlazador del sistema entiende**.
+- **Archivo ejecutable** es una serie de secciones de código que el cargador puede traer a la memoria y ejecutar.
+
+## Atributos de Un Archivo
+- Nombre
+- tipo
+- tamaño
+- protección
+- hora
+- fecha
+- identificación del usuario.
+- Estos se guardan en la estructura de directorios.
+## Operaciones con Archivos
+- Lectura: Especificar el nombre y el lugar en memoria a cargar la info.
+- Escritura: Especificar el nombre del archivo y la informacion a escribir en el.
+- Creacion: encontrarse espacio en el sistema de archivos e insertar una entrada para el nuevo archivo en el directorio
+- Borrar: Se busca archivo y se libera el espacio que ocupa.
+- Truncar: Se busca el archivo y se elimina el contenido de este, dejando el directorio ocupado.
+- Reubicar: Es una reubicacion logica, es decir, no se mueve, solo se remapea.
+
+
+
+
+# CASO FINAL 1:
+Se tiene X servidor y Y servidor, estos pertenecen a una empresa que es datawharehouse en la que todas las noches se
+hace un backup de la informacion de sus usuarios, indique que pasa en este proceso?
+## Interbloqueo
+El problema en este caso, es que, como todas las transacciones se hacen al mismo tiempo y que los servidores solo operan
+durante la noche, llegará un momento en que el servidor se llegue a saturar por muchas transacciones si es que este no
+se amplia su capacidad, intebloqueo de apropiacion.
+Ya que los archivos necestian cerrarse antes de que estos vuelvan a abrirse, por lo que si un archivo es muy grande o se modifica contantemente, este genera latencia y hacer que la cola de transacciones vaya aumentando.
+Tambien, si de este archivo dependen otros, generaria espera circular, esperando a que se libere el recurso padre. 
+
+
+## Semaforos
+En este caso serviría mejor un semaforo con múltiples variables ya que hay muchos procesos similares que buscan ejecu-
+tarse al mismo tiempo y buscan los mismos recursos.
+
+## Planificador de procesos
+En cuanto al plafinicador de procesos, este es el que se encargará de llevar a cabo los procesos que serán ejecutados,
+para llevar un mejor orden y un otorgar un minimo tiempo de respuesta. 
+Tambien es necesario un paradigma multiprogramacion para que el CPU pueda llevar a cabo multiples planificaciones de los procesos entrantes.
+Por lo que necesitaremos un Core que sea multiinucleo (entre mas, mejor) para que este pueda soportar la carga masiva de transacciones entrantes. Y distribuya las colas.
+
+## Segmentación (bicho)
+Este se adapta mejor ya que, al asignar los segmentos a la memoria física, estos no necesariamente deben ir de forma
+contigua, ahorrando así tiempos de asignación de información.
+## Fragmentación (bicho)
+Aqui es de gran utiidad ya que también se podría ahorrar tiempo de respuesta al implementar la fragmentación interna.
+
+## **Paginacion**
+La paginacion  de nemoria seria mas util, ya que estamos llevando muchos procesos en paralelo, por lo que paginarlos nos daria mas estabilidad de memoria principal y menor tiempo de respuesta. Como nos encontramos en un DH, los consumos de lectura y escritra son masivos. Por lo que paginar estos procesos es lo ideal.
+
+
+## **Memoria virtual**
+Utilizaria paginacion en demanda, por que necesitamos traer las paginas basicas de el proceso, y podremos "adivinar" las posibles paginas que necesitemos mas adelante. Cargara las necesarias para arrancar y las mas probables.
+
+## **Disco**
+Optaria por un raid 5, ya que si alguna de nuestras unidades de almacenamiento falla, podemos recuperarla por mediio de la partidad.
